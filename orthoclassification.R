@@ -23,7 +23,7 @@ sr <- "epsg:32615" #Set your preferred CRS
 border = st_read("C:/user/name/place/shapefile.shp")
 border2 = st_transform(border, cr = 32615)
 extent(border2)
-sa = rast(xmin = 659590.7, xmax = 694696.5, ymin = 4730324, ymax = 4762799) #Create a Study Area raster using the extent of your border shapefile
+sa = rast(xmin = 659590.7, xmax = 694696.5, ymin = 4730324, ymax = 4762799, crs = "epsg:32615", res = c(10,10)) #Create a Study Area raster using the extent of your border shapefile
 
 # Generating Data ---------------------------------------------------------
 band1 = rast("C:/user/name/place/orthoimage.tif", lyrs = 1)
@@ -127,4 +127,5 @@ plot(myrf) #To check if the number of prediction trees exceeds the error thresho
 varImpPlot(myrf, sort = TRUE) #To visualize which variables are the most important in your model
 
 predict(composite, myrf, filename="classified.tif", type="response", na.rm=TRUE, overwrite=TRUE, progress="window") 
+
 
