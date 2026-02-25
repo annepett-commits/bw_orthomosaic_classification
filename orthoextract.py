@@ -30,54 +30,54 @@ def Model():  # Model
     arcpy.CheckOutExtension("spatial")
     arcpy.CheckOutExtension("ImageAnalyst")
 
-    kickapooDEM = arcpy.Raster("kickapooDEM")
-    Kickapoo_gdb = "C:\\Users\\annee\\Desktop\\Driftless\\Kickapoo\\Kickapoo.gdb"
-    basin_kickapoo_stuben = "basin_kickapoo_stuben"
-    kickapooDEM_3_ = arcpy.Raster("kickapooDEM")
+    DEM = arcpy.Raster("DEM")
+    gdb = "C:\\Users\\name\\place\\folder\\project.gdb"
+    border = "border"
+    DEM_3_ = arcpy.Raster("DEM")
     Monthly_Actual_Evapotranspiration_SSEBop_CopyRaster_crf = arcpy.Raster("Monthly Actual Evapotranspiration (SSEBop)_CopyRaster.crf")
     ortho_2_ = arcpy.Raster("ortho")
     ortho = arcpy.Raster("ortho")
-    hillshade_3_ = arcpy.Raster("C:\\Users\\annee\\Desktop\\Driftless\\Kickapoo\\Kickapoo.gdb\\hillshade")
-    cosi_2_ = arcpy.Raster("C:\\Users\\annee\\Desktop\\Driftless\\Kickapoo\\Kickapoo.gdb\\cosi")
-    hillshade_4_ = arcpy.Raster("C:\\Users\\annee\\Desktop\\Driftless\\Kickapoo\\Kickapoo.gdb\\hillshade")
-    C_2_ = arcpy.Raster("C:\\Users\\annee\\Desktop\\Driftless\\Kickapoo\\Kickapoo.gdb\\C")
-    cosi_3_ = arcpy.Raster("C:\\Users\\annee\\Desktop\\Driftless\\Kickapoo\\Kickapoo.gdb\\cosi")
-    C_3_ = arcpy.Raster("C:\\Users\\annee\\Desktop\\Driftless\\Kickapoo\\Kickapoo.gdb\\C")
+    hillshade_3_ = arcpy.Raster("C:\\Users\\name\\place\\project.gdb\\hillshade")
+    cosi_2_ = arcpy.Raster("C:\\Users\\name\\place\\project.gdb\\cosi")
+    hillshade_4_ = arcpy.Raster("C:\\Users\\name\\place\\project.gdb\\hillshade")
+    C_2_ = arcpy.Raster("C:\\Users\\name\\place\\project.gdb\\C")
+    cosi_3_ = arcpy.Raster("C:\\Users\\name\\place\\project.gdb\\cosi")
+    C_3_ = arcpy.Raster("C:\\Users\\name\\place\\project.gdb\\C")
 
     # Process: Flow Direction (FlowDirection) (sa)
-    flowDirection = "C:\\Users\\annee\\Desktop\\Driftless\\Kickapoo\\Kickapoo.gdb\\flowDirection"
+    flowDirection = "C:\\Users\\name\\place\\project.gdb\\flowDirection"
     Flow_Direction = flowDirection
     Output_drop_raster = ""
-    flowDirection = arcpy.sa.FlowDirection(kickapooDEM, "NORMAL", Output_drop_raster, "D8")
+    flowDirection = arcpy.sa.FlowDirection(DEM, "NORMAL", Output_drop_raster, "D8")
     flowDirection.save(Flow_Direction)
 
 
     # Process: Fill (Fill) (sa)
-    fill_2_ = "C:\\Users\\annee\\Desktop\\Driftless\\Kickapoo\\Kickapoo.gdb\\fill"
+    fill_2_ = "C:\\Users\\name\\place\\project.gdb\\fill"
     Fill = fill_2_
-    fill_2_ = arcpy.sa.Fill(kickapooDEM, None)
+    fill_2_ = arcpy.sa.Fill(DEM, None)
     fill_2_.save(Fill)
 
 
     # Process: Slope (2) (Slope) (sa)
-    fillSlope = "C:\\Users\\annee\\Desktop\\Driftless\\Kickapoo\\Kickapoo.gdb\\fillSlope"
+    fillSlope = "C:\\Users\\name\\place\\project.gdb\\fillSlope"
     Slope_2_ = fillSlope
     fillSlope = arcpy.sa.Slope(fill_2_, "DEGREE", 1, "PLANAR", "METER", "GPU_THEN_CPU")
     fillSlope.save(Slope_2_)
 
 
     # Process: Create Random Points (CreateRandomPoints) (management)
-    points = arcpy.management.CreateRandomPoints(out_path=Kickapoo_gdb, out_name="points", constraining_feature_class=basin_kickapoo_stuben, constraining_extent="basin_kickapoo_stuben", number_of_points_or_field=300)[0]
+    points = arcpy.management.CreateRandomPoints(out_path=Project_gdb, out_name="points", constraining_feature_class=basin_kickapoo_stuben, constraining_extent="border", number_of_points_or_field=300)[0]
 
     # Process: Aspect (Aspect) (sa)
-    aspectB = "C:\\Users\\annee\\Desktop\\Driftless\\Kickapoo\\Kickapoo.gdb\\aspectB"
+    aspectB = "C:\\Users\\name\\place\\project.gdb\\aspectB"
     Aspect = aspectB
-    aspectB = arcpy.sa.Aspect(kickapooDEM, "PLANAR", "METER", "GEODESIC_AZIMUTHS", "GPU_THEN_CPU")
+    aspectB = arcpy.sa.Aspect(DEM, "PLANAR", "METER", "GEODESIC_AZIMUTHS", "GPU_THEN_CPU")
     aspectB.save(Aspect)
 
 
     # Process: Raster Calculator (3) (RasterCalculator) (ia)
-    transformedAspect = "C:\\Users\\annee\\Desktop\\Driftless\\Kickapoo\\Kickapoo.gdb\\transformedAspect"
+    transformedAspect = "C:\\Users\\name\\place\\project.gdb\\transformedAspect"
     Raster_Calculator_3_ = transformedAspect
     if aspectB:
         transformedAspect = 1 +  Cos(45-"aspectB") * (3.14159/180)
@@ -85,14 +85,14 @@ def Model():  # Model
 
 
     # Process: Raster Calculator (4) (RasterCalculator) (ia)
-    slopeRadian = "C:\\Users\\annee\\Desktop\\Driftless\\Kickapoo\\Kickapoo.gdb\\slopeRadian"
+    slopeRadian = "C:\\Users\\name\\place\\project.gdb\\slopeRadian"
     Raster_Calculator_4_ = slopeRadian
     slopeRadian =  "fillSlope" *0.017453293
     slopeRadian.save(Raster_Calculator_4_)
 
 
     # Process: Raster Calculator (5) (RasterCalculator) (ia)
-    tanslopeRadian = "C:\\Users\\annee\\Desktop\\Driftless\\Kickapoo\\Kickapoo.gdb\\tanslopeRadian"
+    tanslopeRadian = "C:\\Users\\name\\place\\project.gdb\\tanslopeRadian"
     Raster_Calculator_5_ = tanslopeRadian
     if slopeRadian:
         tanslopeRadian =  Tan("slopeRadian")
@@ -100,7 +100,7 @@ def Model():  # Model
 
 
     # Process: Flow Accumulation (FlowAccumulation) (sa)
-    flowAcc = "C:\\Users\\annee\\Desktop\\Driftless\\Kickapoo\\Kickapoo.gdb\\flowAcc"
+    flowAcc = "C:\\Users\\name\\place\\project.gdb\\flowAcc"
     Flow_Accumulation = flowAcc
     if flowDirection:
         flowAcc = arcpy.sa.FlowAccumulation(flowDirection, "", "FLOAT", "D8")
@@ -108,7 +108,7 @@ def Model():  # Model
 
 
     # Process: Raster Calculator (6) (RasterCalculator) (ia)
-    TWI = "C:\\Users\\annee\\Desktop\\Driftless\\Kickapoo\\Kickapoo.gdb\\TWI"
+    TWI = "C:\\Users\\name\\place\\project.gdb\\TWI"
     Raster_Calculator_6_ = TWI
     if flowAcc and flowDirection and slopeRadian and tanslopeRadian:
         TWI =  Ln("flowAcc" / "tanslopeRadian")
@@ -116,29 +116,31 @@ def Model():  # Model
 
 
     # Process: Slope (Slope) (sa)
-    slope_3_ = "C:\\Users\\annee\\Desktop\\Driftless\\Kickapoo\\Kickapoo.gdb\\slope"
+    slope_3_ = "C:\\Users\\name\\place\\project.gdb\\slope"
     Slope = slope_3_
     slope_3_ = arcpy.sa.Slope(kickapooDEM, "DEGREE", 1, "PLANAR", "METER", "GPU_THEN_CPU")
     slope_3_.save(Slope)
 
-
+# THETA= SOLAR ZENITH ANGLE
+# SIGMA= SOLAR AZIMUTH
+    
     # Process: Raster Calculator (2) (RasterCalculator) (ia)
-    cosi = "C:\\Users\\annee\\Desktop\\Driftless\\Kickapoo\\Kickapoo.gdb\\cosi"
+    cosi = "C:\\Users\\name\\place\\project.gdb\\cosi"
     Raster_Calculator_2_ = cosi
     if slope_3_:
-        cosi = Cos(30.5935)*Cos("slope")+Sin(30.5935)*Sin("slope")*Cos(180.52)
+        cosi = Cos(THETA)*Cos("slope")+Sin(THETA)*Sin("slope")*Cos(SIGMA)
         cosi.save(Raster_Calculator_2_)
 
 
     # Process: Hillshade (HillShade) (sa)
-    hillshade_2_ = "C:\\Users\\annee\\Desktop\\Driftless\\Kickapoo\\Kickapoo.gdb\\hillshade"
+    hillshade_2_ = "C:\\Users\\name\\place\\project.gdb\\hillshade"
     Hillshade = hillshade_2_
     hillshade_2_ = arcpy.sa.HillShade(kickapooDEM, 315, 45, "NO_SHADOWS", 1)
     hillshade_2_.save(Hillshade)
 
 
     # Process: Raster Calculator (RasterCalculator) (ia)
-    b0 = "C:\\Users\\annee\\Desktop\\Driftless\\Kickapoo\\Kickapoo.gdb\\b0"
+    b0 = "C:\\Users\\name\\place\\project.gdb\\b0"
     Raster_Calculator = b0
     if cosi and hillshade_2_ and slope_3_:
         b0 = "hillshade"-(ortho_2_*"cosi")
@@ -146,7 +148,7 @@ def Model():  # Model
 
 
     # Process: Raster Calculator (7) (RasterCalculator) (ia)
-    C = "C:\\Users\\annee\\Desktop\\Driftless\\Kickapoo\\Kickapoo.gdb\\C"
+    C = "C:\\Users\\name\\place\\project.gdb\\C"
     Raster_Calculator_7_ = C
     if b0 and cosi and hillshade_2_ and slope_3_:
         C =  b0 / ortho
@@ -154,10 +156,10 @@ def Model():  # Model
 
 
     # Process: Raster Calculator (8) (RasterCalculator) (ia)
-    brightness = "C:\\Users\\annee\\Desktop\\Driftless\\Kickapoo\\Kickapoo.gdb\\brightness"
+    brightness = "C:\\Users\\name\\place\\project.gdb\\brightness"
     Raster_Calculator_8_ = brightness
     if C and b0 and cosi and hillshade_2_ and slope_3_:
-        brightness = "hillshade"*((Cos(30.5935)+"C")/("cosi"+"C"))
+        brightness = "hillshade"*((Cos(THETA)+"C")/("cosi"+"C"))
         brightness.save(Raster_Calculator_8_)
 
 
@@ -169,5 +171,6 @@ def Model():  # Model
 
 if __name__ == '__main__':
     # Global Environment settings
-    with arcpy.EnvManager(scratchWorkspace="C:\\Users\\annee\\Desktop\\Driftless\\Kickapoo\\Kickapoo.gdb", workspace="C:\\Users\\annee\\Desktop\\Driftless\\Kickapoo\\Kickapoo.gdb"):
+    with arcpy.EnvManager(scratchWorkspace="C:\\Users\\name\\place\\project.gdb", workspace="C:\\Users\\name\\place\\project.gdb"):
         Model()
+
